@@ -127,7 +127,7 @@ button.searchButton {
 
     text-align: center;
 
-    width: 30%;
+    width: 350px;
     height: auto;
 
     padding: 10%;
@@ -150,10 +150,8 @@ button.searchButton {
     top: 0;
     right: 0;
     padding: 1%;
-    margin: 4%;
-    width: 6%;
-    height: auto;
-    background-color: #ffffff00;
+    width: 25px;
+    margin: 6%;
     cursor: pointer;
     border-radius: 50%;
 }
@@ -279,4 +277,5 @@ button.searchButton {
     .container_card_digimons {
         grid-template-columns: repeat(2, 47%);
     };
+
 }
