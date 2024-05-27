@@ -7,12 +7,10 @@
 
 body{
     font-family: Arial, sans-serif;
-    overflow-x: hidden;
 }
 
 main{
-    display: block;
-    padding: 1.5%;
+    padding: 0 0 1.5% 0;
     text-align: center;
     background-image: linear-gradient(to bottom, #3971bb, #34c2b8);
 
@@ -131,7 +129,7 @@ button.searchButton {
     height: auto;
 
     padding: 10%;
-    
+
     position: fixed;
     top: 50%;
     left: 50%;
@@ -202,8 +200,8 @@ button.searchButton {
 .container_card_digimons {
     display: grid;
     grid-template-columns: repeat(5, 19%);
-    gap: 10px; /* Espaçamento entre os itens */
-    margin-right: 2.5%;
+    gap: 10px;
+    margin: auto;
 }
 
 
