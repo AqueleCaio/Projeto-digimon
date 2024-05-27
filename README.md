@@ -9,15 +9,13 @@ O **Digimon Explorer** é um projeto simples desenvolvido com **JQuery**, **HTML
 - Possui botões e uma barra de pesquisa para filtrar os digimons que aparecem na tela.
 
 ## Como Visualizar o Projeto
-1. Clone este repositório para o seu computador:
+1. Acesse diretamente o link do projeto:
    ```
-   git clone https://github.com/AqueleCaio/Projeto-digimon.git
+   https://aquelecaio.github.io/Projeto-digimon/
    ```
-
-2. Abra o arquivo `index.html` no seu navegador padrão.
 
 ## API Utilizada
-Para coletar os dados dos Digimons, foi utlizada a API [Digimon API](https://digimon-api.vercel.app/). Ela fornece informações detalhadas sobre vários Digimons, incluindo seus nomes, imagens e níveis.
+Para coletar os dados dos Digimons, foi utlizada a API: [Digimon API](https://digimon-api.vercel.app/). Ela fornece informações detalhadas sobre vários Digimons, incluindo seus nomes, imagens e níveis.
 
 ## Contribuição
 Se deseja contribuir para o projeto, sinta-se à vontade para fazer um fork deste repositório e enviar suas melhorias através de pull requests! 🚀
