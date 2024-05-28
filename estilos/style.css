@@ -265,8 +265,8 @@ button.searchButton {
 /*_____Estilização para aparelhos médios; tablets, notbooks_____*/
 @media screen and (min-width: 700px) and (max-width: 1100px) {
     .container_card_digimons {
-        grid-template-columns: repeat(2, 38%);
-        margin-left: 14%;
+        grid-template-columns: repeat(3, 31.4%);
+        margin: auto;
     }
 }
 
