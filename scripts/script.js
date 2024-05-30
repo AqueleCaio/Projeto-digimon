@@ -1,41 +1,32 @@
-$(document).ready(function() {
-  $.getJSON('scripts/data.json', function(digimons) {
+async function fetchDigimons() {
+  try {
+      const response = await fetch('https://digimon-api.vercel.app/api/digimon');
+      const data = await response.json();
+      return data;
+  } catch (error) {
+      console.error('Erro ao buscar os dados do arquivo JSON:', error);
+      return [];
+  }
+}
 
-    // Função que cria os cards de Digimon que serão exibidos na página principal 
-    let cards = () =>{
-      // Percorre o arquivo JSON e cria um card para cada Digimon
-      $.each(digimons, function(i, digimon) {
+async function createDigimonCards() {
+  const digimons = await fetchDigimons();
+  const digimonContainer = $('.container_card_digimons');
 
-        // Cria um novo card de digimon
-        const card = $('<div class="card_digimons"></div>');
-    
-        // Cria um novo elemento h2 com o nome do digimon respectivo e define o nome do digimon
-        let nomeDigimon = $('<h2 class="nome_digimon"></h2>').text(digimon.name);
-    
-        // Cria um novo elemento img com a classe 'imagem_digimon' e define o atributo src
-        let imgDigimon = $('<img class="imagem_digimon" />').attr('src', digimon.img);
-    
-        //Cria um novo elemento h2 com o level do digimon respectivo e define o level do digimon
-        let levelDigimon = $('<h2 class="level_digimon"></h2>').text(digimon.level);
-    
-        // Cria um novo elemento button com a classe 'verDetalhes' e define o texto
-        const botaoDetalhes = $('<button class="verDetalhes">Ver Detalhes</button>');
-    
-        // Adiciona todos os elementos dentro do elemento card 
-        card.append(nomeDigimon, imgDigimon, levelDigimon, botaoDetalhes);
-    
-        // Adiciona o elemento 'card' ao corpo do documento
-        $('.container_card_digimons').append(card);
-        
-      });
-    }
+  digimons.forEach(function(digimon) {
+      const card = $('<div class="card_digimons"></div>');
+      const nomeDigimon = $('<h2 class="nome_digimon"></h2>').text(digimon.name);
+      const imgDigimon = $('<img class="imagem_digimon" />').attr('src', digimon.img);
+      const levelDigimon = $('<h2 class="level_digimon"></h2>').text(digimon.level);
+      const botaoDetalhes = $('<button class="verDetalhes">Ver Detalhes</button>');
 
-    cards();
-    
-  }).fail(function() {
-    console.log('Erro ao buscar os dados do arquivo JSON');
+      card.append(nomeDigimon, imgDigimon, levelDigimon, botaoDetalhes);
+      digimonContainer.append(card);
   });
+}
 
+$(document).ready(function() {
+  createDigimonCards();
 
   
   // A função abaixo coleta os dados do Digimon clicado e os exibe em um modal.
@@ -131,4 +122,6 @@ $(document).ready(function() {
     $(this).addClass("filtro_ativo");
   });
 
+
 });
+
