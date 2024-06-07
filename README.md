@@ -1,7 +1,7 @@
 # Projeto Digimon Explorer 🦊🔍
 
 ## Descrição
-O **Digimon Explorer** é um projeto simples desenvolvido com **JQuery**, **HTML** e **CSS** que permite aos fãs dos Digimons explorar informações sobre seus personagens favoritos. Ele utiliza uma API para coletar dados como nome, imagem e nível (level) dos Digimons através de uma arquivo JSON.
+O **Digimon Explorer** é um projeto simples desenvolvido com **JQuery**, **HTML** e **CSS** que permite aos fãs dos Digimons explorar informações sobre seus personagens favoritos. Ele utiliza uma API para coletar dados como nome, imagem e nível.
 
 ## Funcionalidades
 - Exibe uma lista de Digimons com seus nomes, imagens e níveis.
