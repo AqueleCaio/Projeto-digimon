@@ -27,6 +27,29 @@ main .logo{
     height: auto;
 }
 
+.botaoPagina{
+    margin: 15px;
+    padding: 2%;
+    height: auto;
+    border-radius: 10px;
+    border: 1px solid #ffffff;
+    background-color: #ffffff33;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    cursor: pointer;
+    transition: ease 0.4s;
+}
+
+.botaoPagina:hover{
+    background-color: #ffffff;
+    color: #008CC7;
+}
+
+.active{
+    background-color: #008CC7;
+    color: #ffffff;
+}
+
 /* ______Estilização dos elementos de busca______*/
 .searchBox {
     display: flex;
@@ -201,7 +224,7 @@ button.searchButton {
     display: grid;
     grid-template-columns: repeat(5, 19%);
     gap: 10px;
-    margin: auto;
+    margin: 50px auto;
 }
 
 

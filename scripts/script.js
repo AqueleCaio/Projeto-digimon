@@ -9,26 +9,122 @@ async function fetchDigimons() {
   }
 }
 
+let state = {
+  page: 1,
+  perPage: 20,
+  totalPages: 0
+};
+
 async function createDigimonCards() {
   const digimons = await fetchDigimons();
   const digimonContainer = $('.container_card_digimons');
 
-  digimons.forEach(function(digimon) {
-      const card = $('<div class="card_digimons"></div>');
-      const nomeDigimon = $('<h2 class="nome_digimon"></h2>').text(digimon.name);
-      const imgDigimon = $('<img class="imagem_digimon" />').attr('src', digimon.img);
-      const levelDigimon = $('<h2 class="level_digimon"></h2>').text(digimon.level);
-      const botaoDetalhes = $('<button class="verDetalhes">Ver Detalhes</button>');
+  // Limpa o container antes de adicionar novos cards
+  digimonContainer.empty();
 
-      card.append(nomeDigimon, imgDigimon, levelDigimon, botaoDetalhes);
-      digimonContainer.append(card);
-  });
+  // Atualiza o total de páginas
+  state.totalPages = Math.ceil(digimons.length / state.perPage);
+
+  // Calcula o índice inicial e final para a página atual
+  let startIndex = (state.page - 1) * state.perPage;
+  let endIndex = Math.min(startIndex + state.perPage, digimons.length);
+
+  // Cria cards apenas para os Digimons na página atual
+  for (let i = startIndex; i < endIndex; i++) {
+    const digimon = digimons[i];
+    const card = $('<div class="card_digimons"></div>');
+    const nomeDigimon = $('<h2 class="nome_digimon"></h2>').text(digimon.name);
+    const imgDigimon = $('<img class="imagem_digimon" />').attr('src', digimon.img);
+    const levelDigimon = $('<h2 class="level_digimon"></h2>').text(digimon.level);
+    const botaoDetalhes = $('<button class="verDetalhes">Ver Detalhes</button>');
+
+    card.append(nomeDigimon, imgDigimon, levelDigimon, botaoDetalhes);
+    digimonContainer.append(card);
+  }
+
+  // Atualiza a paginação
+  updatePagination();
 }
+
+function updatePagination() {
+  const paginationContainer = $('.pagination');
+  paginationContainer.empty();
+
+  for (let i = 1; i <= state.totalPages; i++) {
+    const pageButton = $('<button class="botaoPagina"></button>').text(i);
+    if (i === state.page) {
+      pageButton.addClass('active');
+    }
+    pageButton.click(function() {
+      state.page = i;
+      createDigimonCards();
+    });
+    paginationContainer.append(pageButton);
+  }
+
+}
+
+  //Filtra os Digimons pelo nome digitado no input
+  $('.searchButton').click(async () => {
+    const digimonInput = $('.searchInput').val().toLowerCase();
+
+    //se o input estiver vazio, exibe todos os Digimons da página
+    if (digimonInput === '') {
+      createDigimonCards();
+      return;
+    }
+    
+    // Busca todos os Digimons
+    const allDigimons = await fetchDigimons();
+    
+    // Filtra os Digimons pelo nome digitado
+    const filteredDigimons = allDigimons.filter(digimon => digimon.name.toLowerCase().includes(digimonInput));
+    
+    // Atualiza a UI com os Digimons filtrados
+    updateContainer(filteredDigimons);
+  });
+
+  // Filtra os Digimons pelo level selecionado
+  $('.filtro').click(async function() {
+    const levelSelecionado = $(this).text().trim();
+
+    // Busca todos os Digimons
+    const allDigimons = await fetchDigimons();
+
+    // Filtra os Digimons pelo level selecionado
+    const filteredDigimons = allDigimons.filter(digimon => {
+      if (levelSelecionado === 'Todos') {
+        return true;
+      }
+      return digimon.level.trim() === levelSelecionado;
+    });
+
+    // Atualiza a UI com os Digimons filtrados
+    updateContainer(filteredDigimons);
+  });
+  
+  // Função para atualizar a UI com os Digimons filtrados
+  function updateContainer(digimons) {
+    // Limpa o container de Digimons
+    $('.container_card_digimons').empty();
+    
+    // Adiciona os Digimons filtrados ao container
+    digimons.forEach(digimon => {
+      $('.container_card_digimons').append(`
+        <div class="card_digimons">
+          <h2 class="nome_digimon">${digimon.name}</h2>
+          <img class="imagem_digimon" src="${digimon.img}">
+          <h2 class="level_digimon">${digimon.level}</h2>
+          <button class="verDetalhes">Ver Detalhes</button>
+        </div>
+      `);
+    });
+  }
+
 
 $(document).ready(function() {
   createDigimonCards();
 
-  
   // A função abaixo coleta os dados do Digimon clicado e os exibe em um modal.
   $(document).on("click", ".verDetalhes", function(){
     let nomeDigimon = $(this).siblings('.nome_digimon').text();
@@ -73,47 +169,9 @@ $(document).ready(function() {
   $('.searchInput').keypress(function(event) {
     if (event.keyCode === 13) {
       $('.searchButton').click();
+      $(".filtro").removeClass("filtro_ativo");
+
     }
-  });
-
-    
-  // Filtra os cards de Digimon pelo nome digitado no input
-  $('.searchButton').click(() => {
-    const digimonInput = $('.searchInput').val();
-  
-    // Esconde todos os cards de Digimon
-    $('.container_card_digimons .card_digimons').hide();
-  
-    // Mostra apenas os cards que correspondem ao nome digitado
-    $('.container_card_digimons .card_digimons').each(function() {
-      const digimonName = $(this).find('.nome_digimon').text().toLowerCase();
-      if (digimonName.includes(digimonInput.toLowerCase())) {
-        $(this).show();
-      }
-    });
-  
-    // Remove mensagens de erro existentes
-    $('.containerErro .erro').remove();
-  
-    // Se o Digimon digitado não existir no array, exibir mensagem de erro
-    if ($('.container_card_digimons .card_digimons:visible').length === 0) {
-      $('.containerErro').append('<h2 class="erro"> O Digimon ' + digimonInput + ' não foi encontrado :(</h2>');
-    }
-  });
-  
-
-  // Filtra os cards de Digimon pelo level selecionado
-  $('.filtro').click(function() {
-    const levelSelecionado = $(this).text().trim();
-
-    $('.container_card_digimons .card_digimons').each(function() {
-        const level = $(this).find('.level_digimon').text().trim();
-        if (level !== levelSelecionado && levelSelecionado !== 'Todos') {
-            $(this).hide();
-        } else {
-            $(this).show();
-        }
-    });
   });
 
   // Adiciona a classe 'filtro_ativo' ao filtro selecionado pelo usuário
@@ -122,6 +180,4 @@ $(document).ready(function() {
     $(this).addClass("filtro_ativo");
   });
 
-
 });
-
