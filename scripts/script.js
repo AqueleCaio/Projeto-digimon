@@ -107,20 +107,29 @@ function updatePagination() {
   function updateContainer(digimons) {
     // Limpa o container de Digimons
     $('.container_card_digimons').empty();
-    
-    // Adiciona os Digimons filtrados ao container
-    digimons.forEach(digimon => {
-      $('.container_card_digimons').append(`
-        <div class="card_digimons">
-          <h2 class="nome_digimon">${digimon.name}</h2>
-          <img class="imagem_digimon" src="${digimon.img}">
-          <h2 class="level_digimon">${digimon.level}</h2>
-          <button class="verDetalhes">Ver Detalhes</button>
-        </div>
-      `);
-    });
-  }
 
+    // Remove mensagens de erro existentes
+    $('.containerErro .erro').remove();
+  
+    if (digimons.length === 0) {
+      // Caso não haja Digimons correspondentes, exibe a mensagem de não encontrado
+      $('.containerErro').append(`
+          <h2 class="erro">Digimon não encontrado :(</h2>
+      `);
+    } else {
+      // Adiciona os Digimons filtrados ao container
+      digimons.forEach(digimon => {
+        $('.container_card_digimons').append(`
+          <div class="card_digimons">
+            <h2 class="nome_digimon">${digimon.name}</h2>
+            <img class="imagem_digimon" src="${digimon.img}">
+            <h2 class="level_digimon">${digimon.level}</h2>
+            <button class="verDetalhes">Ver Detalhes</button>
+          </div>
+        `);
+      });
+    }  
+  }
 
 $(document).ready(function() {
   createDigimonCards();
