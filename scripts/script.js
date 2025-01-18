@@ -15,6 +15,45 @@ let state = {
   totalPages: 0
 };
 
+const levelColors = {
+  "Fresh": "#6c757d",
+  "In Training": "#17a2b8",
+  "Rookie": "#28a745",
+  "Champion": "#ffc107",
+  "Ultimate": "#fd7e14",
+  "Mega": "#dc3545",
+  "Armor": "#007bff"
+};
+
+async function applyFilter(level) {
+  const digimons = await fetchDigimons();
+  const digimonContainer = $('.container_card_digimons');
+
+  // Limpa o container antes de adicionar os cards filtrados
+  digimonContainer.empty();
+
+  // Filtra os Digimons com base no nível selecionado
+  const filteredDigimons = level === "todos" 
+      ? digimons 
+      : digimons.filter(digimon => digimon.level.toLowerCase() === level.toLowerCase());
+
+  // Atualiza os cards para os Digimons filtrados
+  filteredDigimons.forEach(digimon => {
+      const card = $('<div class="card_digimons"></div>');
+      const nomeDigimon = $('<h2 class="nome_digimon"></h2>').text(digimon.name);
+      const imgDigimon = $('<img class="imagem_digimon" />').attr('src', digimon.img);
+      const levelDigimon = $('<h2 class="level_digimon"></h2>').text(digimon.level);
+
+      // Define a cor do card com base no nível
+      const backgroundColor = levelColors[digimon.level];
+      card.css("background-color", backgroundColor);
+
+      card.append(nomeDigimon, imgDigimon, levelDigimon);
+      digimonContainer.append(card);
+  });
+}
+
+
 async function createDigimonCards() {
   const digimons = await fetchDigimons();
   const digimonContainer = $('.container_card_digimons');
@@ -37,6 +76,10 @@ async function createDigimonCards() {
     const imgDigimon = $('<img class="imagem_digimon" />').attr('src', digimon.img);
     const levelDigimon = $('<h2 class="level_digimon"></h2>').text(digimon.level);
     const botaoDetalhes = $('<button class="verDetalhes">Ver Detalhes</button>');
+
+    // Define a cor do card com base no nível
+    const backgroundColor = levelColors[digimon.level] || "#343a40"; // Cor padrão
+    card.css("background-color", backgroundColor);
 
     card.append(nomeDigimon, imgDigimon, levelDigimon, botaoDetalhes);
     digimonContainer.append(card);
@@ -183,10 +226,20 @@ $(document).ready(function() {
     }
   });
 
-  // Adiciona a classe 'filtro_ativo' ao filtro selecionado pelo usuário
-  $(".filtro").click(function() {
-    $(".filtro").removeClass("filtro_ativo");
-    $(this).addClass("filtro_ativo");
-  });
+   // Adiciona evento aos filtros
+   $('.filtro').click(function () {
+    const selectedLevel = $(this).attr('id');
+
+    // Atualiza a classe ativa para o filtro selecionado
+    $('.filtro').removeClass('filtro_ativo');
+    $(this).addClass('filtro_ativo');
+
+    // Aplica o filtro
+    applyFilter(selectedLevel);
+});
+
+// Carrega todos os Digimons ao iniciar
+applyFilter("todos");
+
 
 });
